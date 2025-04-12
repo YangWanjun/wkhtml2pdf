@@ -73,9 +73,27 @@ def index():
         if request.method == 'POST':
             filename = request.form.get('name', None)
             content = request.form.get('content', None)
+            orientation = request.form.get('orientation', "Portrait")  # Landscape/Portrait
+            options = {'orientation': orientation}
+            if 'title' in request.form.keys():
+                options['title'] = request.form.get('title')
+            if 'page-size' in request.form.keys():
+                options['page-size'] = request.form.get('page-size')
+            if 'margin-top' in request.form.keys():
+                options['margin-top'] = request.form.get('margin-top')
+            if 'margin-left' in request.form.keys():
+                options['margin-left'] = request.form.get('margin-left')
+            if 'margin-right' in request.form.keys():
+                options['margin-right'] = request.form.get('margin-right')
+            if 'margin-bottom' in request.form.keys():
+                options['margin-bottom'] = request.form.get('margin-bottom')
+            if 'page-width' in request.form.keys():
+                options['page-width'] = request.form.get('page-width')
+            if 'page-height' in request.form.keys():
+                options['page-height'] = request.form.get('page-height')
             if not content:
                 return '変換しようとする内容がありません', 400
-            data = generate_pdf_to_binary(content)
+            data = generate_pdf_to_binary(content, config=options)
             response = make_response()
             response.data = data
             if filename:
